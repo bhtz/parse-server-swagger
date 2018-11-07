@@ -3,7 +3,7 @@ parse-server-swagger
 
 Autogenerate parse server API swagger.json and swagger UI from Parse Server schemas
 
-Installation
+Installation (not ready yet)
 ------------
 
         npm i parse-server-swagger -S

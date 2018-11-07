@@ -13,7 +13,7 @@ exports.parseSchemaToSwagger = function (spec, schemas) {
 
 /**
  * 
- * @param {*} classe 
+ * @param {classe} parse server classes 
  */
 function transformClasseToSchema(classe) {
     var schema = { type: "object", properties: {} };
