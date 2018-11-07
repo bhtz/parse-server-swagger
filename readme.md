@@ -13,7 +13,7 @@ How to use ?
 
 ``` js
 
-var ParseSwagger = require('./parse-server-swagger');
+var ParseSwagger = require('parse-server-swagger');
 
 // Serve swagger API documentation
 if (CONFIG.swagger) {

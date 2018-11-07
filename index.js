@@ -1,7 +1,7 @@
 var express = require('express');
 var swaggerUi = require('swagger-ui-express');
-var parseSchemaToSwagger = require('./schema-to-swagger').parseSchemaToSwagger;
 var request = require('request-promise');
+var parseSchemaToSwagger = require('./schema-to-swagger').parseSchemaToSwagger;
 var parseBaseSwaggerSpec = require('./parse-swagger-base.json');
 
 /**
