@@ -1,6 +1,6 @@
 {
   "name": "parse-server-swagger",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "parse server swagger middleware autogenerate swagger.json from parse server schemas",
   "main": "index.js",
   "scripts": {
