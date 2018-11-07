@@ -1,7 +1,7 @@
 parse-server-swagger
 ====================
 
-(DRAFT)
+[https://github.com/bhtz/parse-server-swagger/wiki/Roadmap](V1 ROADMAP)
 
 Autogenerate parse server API swagger.json and swagger UI from Parse Server schemas.
 
