@@ -24,6 +24,7 @@ if (CONFIG.swagger) {
         parsePath: '/parse'
         appId: '<appId>',
         masterKey: '<masterKey>',
+        excludes: ['className'],
     });
 
     app.use(parseSwagger);

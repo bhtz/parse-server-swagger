@@ -1,8 +1,12 @@
 /**
  * Transform Parse Server schema.json to swagger.json
  */
-exports.parseSchemaToSwagger = function (spec, schemas) {
+exports.parseSchemaToSwagger = function (spec, schemas, excludes) {
     for (const classes of schemas) {
+        if (excludes.includes(classes.className)) {
+            continue;
+        }
+
         spec.components.schemas[classes.className] = transformClasseToSchema(classes);
         spec.paths['/parse/classes/' + classes.className] = getPath(classes);
         spec.paths['/parse/classes/' + classes.className + '/{id}'] = getPathById(classes);
