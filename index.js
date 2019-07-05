@@ -32,8 +32,10 @@ ParseSwagger.prototype.renderSwaggerSpec = function (req, res) {
         headers: { "X-Parse-Application-Id": this.config.appId, "X-Parse-Master-Key": this.config.masterKey }
     };
 
+    var excludes = this.config.excludes || [];
+
     request(options).then((data) => {
-        var swagger = parseSchemaToSwagger(parseBaseSwaggerSpec, data.results);
+        var swagger = parseSchemaToSwagger(parseBaseSwaggerSpec, data.results, excludes);
         res.json(swagger);
     }).catch((error) => {
         res.send('Request failed with response code ' + error.status);
