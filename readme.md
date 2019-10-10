@@ -1,9 +1,7 @@
 parse-server-swagger
 ====================
 
-[V1 ROADMAP](https://github.com/bhtz/parse-server-swagger/wiki/Roadmap)
-
-Autogenerate parse server API swagger.json and swagger UI from Parse Server schemas.
+Autogenerate parse server API openapi.json and swagger UI from Parse Server schemas.
 
 Installation
 ------------
@@ -13,19 +11,15 @@ Installation
 How to use ?
 ------------
 
+This assumes that `Parse` is initialized with a master key.
+
 ``` js
 
-var ParseSwagger = require('parse-server-swagger');
+const ParseSwagger = require('parse-server-swagger');
 
 // Serve swagger API documentation
 if (CONFIG.swagger) {
-    var parseSwagger = new ParseSwagger({
-        host: 'http:localhost:1337',
-        parsePath: '/parse'
-        appId: '<appId>',
-        masterKey: '<masterKey>',
-    });
-
+    const parseSwagger = new ParseSwagger();
     app.use(parseSwagger);
 }
 
@@ -33,8 +27,8 @@ if (CONFIG.swagger) {
 
 Expose swagger UI here: 
     
-    '/swagger'
+    '/api-docs'
 
 Expose swagger.json here:
     
-    '/api-docs'
+    '/openapi.json'

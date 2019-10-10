@@ -1,0 +1,245 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Parse API",
+    "description": "Interact with the Parse API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/parse"
+    }
+  ],
+  "security": [
+    {
+      "API Key": [],
+      "ParseApplicationId": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "ParseSessionToken": {
+        "type": "apiKey",
+        "name": "X-Parse-Session-Token",
+        "in": "header"
+      },
+      "ParseApplicationId": {
+        "type": "apiKey",
+        "name": "X-Parse-Application-Id",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "ParseObjectBase": {
+        "type": "object",
+        "required": ["objectId", "createdAt", "updatedAt", "ACL"],
+        "properties": {
+          "objectId": {
+            "type": "string",
+            "readOnly": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "ACL": {
+            "type": "object",
+            "readOnly": true
+          }
+        }
+      },
+      "Date": {
+        "type": "object",
+        "required": ["__type", "iso"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["Date"]
+          },
+          "iso": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Pointer": {
+        "type": "object",
+        "required": ["__type", "className", "objectId"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["Pointer"]
+          },
+          "objectId": {
+            "type": "string"
+          },
+          "className": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["code", "error"],
+        "properties": {
+          "code": {
+            "type": "number"
+          },
+          "error": {
+            "type": "string",
+            "description": "The error message"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/functions/{functionName}": {
+      "post": {
+        "summary": "Call a Cloud Function",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "functionName",
+            "description": "The name of the Cloud Function to call",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response from function",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {}
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Cloud Code"]
+      }
+    },
+    "/jobs/{jobName}": {
+      "post": {
+        "summary": "Trigger a Background Job",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "jobName",
+            "description": "The name of the job you want to trigger",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "description": "Optional job parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response from function",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {}
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Cloud Code"]
+      }
+    },
+    "/files/{filename}": {
+      "post": {
+        "summary": "Upload a file",
+        "description": "To upload a file to Parse, send a POST request to the files URL, postfixed with the name of the file. The request must contain the Content-Type header associated with the file. Keep in mind that files are limited to 10 megabytes. Here’s a simple example that’ll create a file named hello.txt containing a string.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "filename",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The filename of the file you want to upload.",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "201": {
+            "headers": {
+              "Location": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "description": "URL for the file"
+              }
+            },
+            "description": "File upload successful"
+          }
+        },
+        "tags": ["Files"]
+      }
+    }
+  }
+}
