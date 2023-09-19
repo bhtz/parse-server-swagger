@@ -10,12 +10,6 @@
       "url": "/parse"
     }
   ],
-  "security": [
-    {
-      "API Key": [],
-      "ParseApplicationId": []
-    }
-  ],
   "components": {
     "securitySchemes": {
       "ParseSessionToken": {
