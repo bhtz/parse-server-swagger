@@ -64,6 +64,11 @@ function ParseOpenAPI(options) {
     );
 
     app.use(openAPIEndpoint, this.renderOpenAPISpec.bind(this));
+    
+    // initialise parse
+    Parse.serverURL = options.serverURL;
+    Parse.initialize(options.appId, options.javascriptKey);
+    Parse.masterKey = options.masterKey;    
 
     return app;
 };

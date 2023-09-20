@@ -19,7 +19,12 @@ const ParseSwagger = require('parse-server-swagger');
 
 // Serve swagger API documentation
 if (CONFIG.swagger) {
-    const parseSwagger = new ParseSwagger();
+    const parseSwagger = new ParseSwagger({
+        serverURL: "https://yourServerUrl/parse",
+        appId: "yourAppId",
+        masterKey: "yourMasterKey",
+
+    });
     app.use(parseSwagger);
 }
 

@@ -19,7 +19,7 @@ const readOnlyFields = ["objectId", "createdAt", "updatedAt", "ACL"];
  * @prop {boolean} [allowMasterKeyEndpoints] - Generate documentation for every possible endpoint,
  *  regardless of CLPs
  * @prop {boolean} [allowParseClasses] - Generate documentation for special Parse classes (starting with "_")
- * 
+ *
  * Transform Parse Server schema to openapi.json
  * @param {ParseSchema[]} schemas
  * @param {Options} [options] - Opportunity to pass a full URL
@@ -70,7 +70,30 @@ module.exports = function(schemas, options = {}) {
  * @param {object} classSchema server classes
  */
 function transformClassToSchema(classSchema) {
-  const fieldSchema = { type: "object", properties: {} };
+  const fieldSchema = {
+    type: "object",
+    required: ["objectId", "createdAt", "updatedAt", "ACL"],
+    properties: {
+      objectId: {
+        type: "string",
+        readOnly: true
+      },
+      createdAt: {
+        type: "string",
+        format: "date-time",
+        readOnly: true
+      },
+      updatedAt: {
+        type: "string",
+        format: "date-time",
+        readOnly: true
+      },
+      ACL: {
+        type: "object",
+        readOnly: true
+      }
+    }
+  };
 
   for (const fieldName in classSchema.fields) {
     const element = classSchema.fields[fieldName];
@@ -78,10 +101,7 @@ function transformClassToSchema(classSchema) {
       fieldSchema.properties[fieldName] = schemaTypeToOpenAPIType(element);
     }
   }
-
-  return {
-    allOf: [fieldSchema, { $ref: "#/components/schemas/ParseObjectBase" }]
-  };
+  return fieldSchema;
 }
 
 /**
@@ -110,18 +130,21 @@ function schemaTypeToOpenAPIType(fieldDefinition) {
 
     case "Pointer":
       return {
-        allOf: [
-          { $ref: "#/components/schemas/Pointer" },
-          {
-            type: "object",
-            properties: {
-              className: {
-                type: "string",
-                enum: [fieldDefinition.targetClass]
-              }
-            }
+        type: "object",
+        required: ["__type", "className", "objectId"],
+        properties: {
+          __type: {
+            type: "string",
+            enum: ["Pointer"]
+          },
+          objectId: {
+            type: "string"
+          },
+          className: {
+            type: "string",
+            enum: [fieldDefinition.targetClass]
           }
-        ]
+        }
       };
     case "Relation":
       return { type: "object" };
@@ -136,7 +159,7 @@ function schemaTypeToOpenAPIType(fieldDefinition) {
 
 /**
  * Get OpenAPI configuration for parse endpoint
- * 
+ *
  * @param {ParseSchema} classSchema
  */
 function getParseClassActions(classSchema) {
